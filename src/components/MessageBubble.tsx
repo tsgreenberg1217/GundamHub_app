@@ -19,7 +19,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
           isUser ? styles.bubbleUser : styles.bubbleAssistant,
         ]}>
         <Text style={[styles.text, isUser ? styles.textUser : styles.textAssistant]}>
-          {message.content}
+          {message.content}{message.isStreaming ? '▌' : ''}
         </Text>
       </View>
     </View>

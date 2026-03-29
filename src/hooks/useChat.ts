@@ -1,11 +1,7 @@
-import { useState, useCallback } from 'react';
-import {
-  AimuroResponse,
-  ChatMessage,
-  ChatMessagePayload,
-  ConversationPayload,
-} from '../types/chat';
-import { sendChatMessage } from '../services/chatService';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import type { ChatMessage, ChatMessagePayload, ConversationPayload } from '../types/chat';
+import { createChatStream } from '../services/chatService';
+import type { SSEClient } from '../services/sseClient';
 
 function makeId(): string {
   return Math.random().toString(36).slice(2);
@@ -15,12 +11,22 @@ export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const clientRef = useRef<SSEClient | null>(null);
+
+  useEffect(() => {
+    return () => {
+      clientRef.current?.close();
+    };
+  }, []);
 
   const send = useCallback(
-    async (text: string) => {
+    (text: string) => {
       if (!text.trim() || sending) {
         return;
       }
+
+      clientRef.current?.close();
+      clientRef.current = null;
 
       const userMsg: ChatMessage = {
         id: makeId(),
@@ -38,21 +44,39 @@ export function useChat() {
           content: m.content,
         }),
       );
-      try {
-        const reply: AimuroResponse = await sendChatMessage({ conversation });
-        console.log("reply is: ", reply);
-        const assistantMsg: ChatMessage = {
-          id: makeId(),
-          role: 'assistant',
-          content: reply.answer,
-          // timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, assistantMsg]);
-      } catch {
-        setError('Failed to reach The Conduit. Check your connection.');
-      } finally {
+
+      const assistantId = makeId();
+      setMessages(prev => [
+        ...prev,
+        { id: assistantId, role: 'assistant', content: '', isStreaming: true },
+      ]);
+
+      const finalize = () => {
+        setMessages(prev =>
+          prev.map(m =>
+            m.id === assistantId ? { ...m, isStreaming: false } : m,
+          ),
+        );
         setSending(false);
-      }
+        clientRef.current = null;
+      };
+
+      clientRef.current = createChatStream(
+        { conversation } as ConversationPayload,
+        token => {
+          setMessages(prev =>
+            prev.map(m =>
+              m.id === assistantId ? { ...m, content: m.content + token } : m,
+            ),
+          );
+        },
+        errorMessage => {
+          setError(errorMessage);
+          setMessages(prev => prev.filter(m => m.id !== assistantId));
+          finalize();
+        },
+        finalize,
+      );
     },
     [messages, sending],
   );
