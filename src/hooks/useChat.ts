@@ -1,5 +1,10 @@
 import { useState, useCallback } from 'react';
-import type { ChatMessage, ChatMessagePayload } from '../types/chat';
+import {
+  AimuroResponse,
+  ChatMessage,
+  ChatMessagePayload,
+  ConversationPayload,
+} from '../types/chat';
 import { sendChatMessage } from '../services/chatService';
 
 function makeId(): string {
@@ -21,25 +26,26 @@ export function useChat() {
         id: makeId(),
         role: 'user',
         content: text.trim(),
-        timestamp: new Date(),
       };
 
       setMessages(prev => [...prev, userMsg]);
       setSending(true);
       setError(null);
 
-      const history: ChatMessagePayload[] = [...messages, userMsg].map(m => ({
-        role: m.role,
-        content: m.content,
-      }));
-
+      const conversation: ChatMessagePayload[] = [...messages, userMsg].map(
+        m => ({
+          role: m.role,
+          content: m.content,
+        }),
+      );
       try {
-        const reply = await sendChatMessage(history);
+        const reply: AimuroResponse = await sendChatMessage({ conversation });
+        console.log("reply is: ", reply);
         const assistantMsg: ChatMessage = {
           id: makeId(),
           role: 'assistant',
-          content: reply,
-          timestamp: new Date(),
+          content: reply.answer,
+          // timestamp: new Date(),
         };
         setMessages(prev => [...prev, assistantMsg]);
       } catch {
