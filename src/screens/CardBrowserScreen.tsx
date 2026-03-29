@@ -15,7 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useCards } from '../hooks/useCards';
 import { CardItem } from '../components/CardItem';
 import { FilterTab } from '../components/FilterTab';
-import type { CardFilter } from '../types/card';
+import type { Card, CardFilter } from '../types/card';
 import { CARD_FILTERS } from '../types/card';
 import { Colors } from '../theme/colors';
 import { Fonts, FontSizes } from '../theme/typography';
@@ -36,9 +36,7 @@ export function CardBrowserScreen() {
       return cards;
     }
     const q = searchQuery.toLowerCase();
-    return cards.filter((c: import('../types/card').Card) =>
-      c.name.toLowerCase().includes(q),
-    );
+    return cards.filter(c => c.name.toLowerCase().includes(q));
   }, [cards, searchQuery]);
 
   return (
@@ -52,7 +50,8 @@ export function CardBrowserScreen() {
           <Pressable
             onPress={() => setShowSearch(v => !v)}
             hitSlop={8}
-            style={styles.iconButton}>
+            style={styles.iconButton}
+          >
             <MaterialCommunityIcons
               name="magnify"
               size={22}
@@ -79,8 +78,9 @@ export function CardBrowserScreen() {
       {/* Filter tabs */}
       <ScrollView
         horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.filterRow}>
+        // showsHorizontalScrollIndicator={false}
+        // contentContainerStyle={styles.filterRow}
+      >
         {CARD_FILTERS.map(f => (
           <FilterTab
             key={f}
