@@ -26,7 +26,7 @@ export function RarityBadge({ rarity }: RarityBadgeProps) {
   const color = getRarityColor(rarity);
   return (
     <View style={[styles.badge, { borderColor: color }]}>
-      <Text style={[styles.text, { color }]}>{rarity.toUpperCase()}</Text>
+      <Text style={[styles.text, { color }]}>{rarity.replaceAll(" ","").toUpperCase()}</Text>
     </View>
   );
 }
