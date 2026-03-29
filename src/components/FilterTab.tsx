@@ -13,10 +13,12 @@ export function FilterTab({ label, active, onPress }: FilterTabProps) {
   return (
     <Pressable
       onPress={onPress}
-      // hitSlop={8}
+      hitSlop={8}
       style={[styles.tab, active ? styles.tabActive : styles.tabInactive]}
     >
-      <Text style={[styles.label, active ? styles.labelActive : styles.labelInactive]}>
+      <Text
+        style={[styles.label, active ? styles.labelActive : styles.labelInactive]}
+      >
         {label}
       </Text>
     </Pressable>
@@ -25,10 +27,11 @@ export function FilterTab({ label, active, onPress }: FilterTabProps) {
 
 const styles = StyleSheet.create({
   tab: {
-    paddingHorizontal: 14,
-    // paddingVertical: 7,
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
     borderRadius: 4,
-    marginRight: 8,
+    backgroundColor: 'blue'
+
   },
   tabActive: {
     backgroundColor: Colors.primary,
@@ -42,6 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface2,
   },
   label: {
+    padding: 10,
     fontFamily: Fonts.headline,
     fontSize: FontSizes.sm,
   },

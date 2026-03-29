@@ -40,13 +40,23 @@ export function CardBrowserScreen() {
   }, [cards, searchQuery]);
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View
+      style={[styles.container, { paddingTop: insets.top }]}
+    >
       <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
 
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.logo}>NEON CONDUIT</Text>
-        <View style={styles.headerIcons}>
+      <View
+      style={styles.header}
+      >
+        <Text
+        style={styles.logo}
+        >
+          NEON CONDUIT
+        </Text>
+        <View
+        // style={styles.headerIcons}
+        >
           <Pressable
             onPress={() => setShowSearch(v => !v)}
             hitSlop={8}
@@ -78,8 +88,8 @@ export function CardBrowserScreen() {
       {/* Filter tabs */}
       <ScrollView
         horizontal
-        // showsHorizontalScrollIndicator={false}
-        // contentContainerStyle={styles.filterRow}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.filterRow}
       >
         {CARD_FILTERS.map(f => (
           <FilterTab
@@ -93,12 +103,20 @@ export function CardBrowserScreen() {
 
       {/* Content */}
       {loading ? (
-        <View style={styles.centered}>
+        <View
+        style={styles.centered}
+        >
           <ActivityIndicator size="large" color={Colors.primary} />
         </View>
       ) : error ? (
-        <View style={styles.centered}>
-          <Text style={styles.errorText}>Failed to load cards.</Text>
+        <View
+        style={styles.centered}
+        >
+          <Text
+          style={styles.errorText}
+          >
+            Failed to load cards.
+          </Text>
           <Pressable onPress={() => refetch()} style={styles.retryButton}>
             <Text style={styles.retryLabel}>Retry</Text>
           </Pressable>
@@ -115,8 +133,14 @@ export function CardBrowserScreen() {
           ]}
           renderItem={({ item }) => <CardItem card={item} />}
           ListEmptyComponent={
-            <View style={styles.centered}>
-              <Text style={styles.emptyText}>No cards found.</Text>
+            <View
+            style={styles.centered}
+            >
+              <Text
+              style={styles.emptyText}
+              >
+                No cards found.
+              </Text>
             </View>
           }
         />
@@ -167,7 +191,7 @@ const styles = StyleSheet.create({
   },
   filterRow: {
     paddingHorizontal: HORIZONTAL_PADDING,
-    paddingBottom: 14,
+    alignItems: 'flex-start',
   },
   listContent: {
     paddingHorizontal: HORIZONTAL_PADDING,
