@@ -62,7 +62,7 @@ export function ChatScreen() {
           renderItem={({ item }) => <MessageBubble message={item} />}
           contentContainerStyle={[styles.listContent, { flexGrow: 1 }]}
           onContentSizeChange={() =>
-            listRef.current?.scrollToEnd({ animated: true })
+            listRef.current?.scrollToOffset({ offset: Infinity, animated: true })
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
