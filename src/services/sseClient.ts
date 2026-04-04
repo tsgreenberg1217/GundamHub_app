@@ -24,6 +24,11 @@ export class SSEClient {
       method: options.method,
       headers: options.headers,
       body: options.body,
+      pollingInterval: 0,
+    });
+
+    this.es.addEventListener('open', event => {
+      console.log('SSE Client opened', event);
     });
 
     this.es.addEventListener('message', event => {
@@ -32,8 +37,20 @@ export class SSEClient {
       }
     });
 
-    this.es.addEventListener('error', onError);
-    this.es.addEventListener('close', onDone);
+    this.es.addEventListener('error', e => {
+      console.log('SSEClient Error:', e);
+      this.es.close();
+      onError(e);
+    });
+    this.es.addEventListener('done', () => {
+      console.log('SSE stream done (server closed)');
+      this.es.close();
+      onDone();
+    });
+
+    this.es.addEventListener('close', () => {
+      console.log('SSE client closed');
+    });
   }
 
   close(): void {

@@ -21,7 +21,15 @@ export function createChatStream(
     rawData => {
       try {
         const parsed: AimuroResponse = JSON.parse(rawData);
-        onToken(parsed.answer);
+        console.log("parsed ", parsed);
+        console.log("parsed completed ", parsed.isComplete);
+        if(parsed.isComplete) {
+          console.log("calling onDone")
+          onDone();
+        }else {
+          console.log("Sending token")
+          onToken(parsed.answer);
+        }
       } catch {
         // Malformed SSE frame — skip
       }

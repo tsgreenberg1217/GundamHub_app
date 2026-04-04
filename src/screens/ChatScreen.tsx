@@ -15,16 +15,19 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useChat } from '../hooks/useChat';
 import { MessageBubble } from '../components/MessageBubble';
 import type { ChatMessage } from '../types/chat';
+import { Status } from '../types/chat';
 import { Colors } from '../theme/colors';
 import { Fonts, FontSizes } from '../theme/typography';
 
 export function ChatScreen() {
   const insets = useSafeAreaInsets();
-  const { messages, sending, error, send } = useChat();
+  const { messages, status, errorMessage, send } = useChat();
+  const isActive = status === Status.Loading || status === Status.Streaming;
   const [inputText, setInputText] = useState('');
   const listRef = useRef<FlatList<ChatMessage>>(null);
 
   const handleSend = async () => {
+    console.log("Sending chat");
     const text = inputText;
     setInputText('');
     await send(text);
@@ -42,11 +45,11 @@ export function ChatScreen() {
             <View
               style={[
                 styles.statusDot,
-                { backgroundColor: sending ? '#f39c12' : Colors.primary },
+                { backgroundColor: isActive ? '#f39c12' : Colors.primary },
               ]}
             />
             <Text style={styles.statusLabel}>
-              {sending ? 'Processing...' : 'Online'}
+              {isActive ? 'Processing...' : 'Online'}
             </Text>
           </View>
         </View>
@@ -76,9 +79,9 @@ export function ChatScreen() {
         />
 
         {/* Error banner */}
-        {error && (
+        {status === Status.Error && (
           <View style={styles.errorBanner}>
-            <Text style={styles.errorText}>{error}</Text>
+            <Text style={styles.errorText}>{errorMessage}</Text>
           </View>
         )}
 
@@ -96,17 +99,17 @@ export function ChatScreen() {
             onChangeText={setInputText}
             returnKeyType="send"
             onSubmitEditing={handleSend}
-            editable={!sending}
+            editable={!isActive}
             multiline={false}
           />
           <Pressable
             style={[
               styles.sendButton,
-              (!inputText.trim() || sending) && styles.sendButtonDisabled,
+              (!inputText.trim() || isActive) && styles.sendButtonDisabled,
             ]}
             onPress={handleSend}
-            disabled={!inputText.trim() || sending}>
-            {sending ? (
+            disabled={!inputText.trim() || isActive}>
+            {isActive ? (
               <ActivityIndicator size="small" color={Colors.background} />
             ) : (
               <MaterialCommunityIcons

@@ -1,5 +1,14 @@
 export type MessageRole = 'user' | 'assistant';
 
+export const Status = Object.freeze({
+  Idle:      'IDLE',
+  Loading:   'LOADING',
+  Streaming: 'STREAMING',
+  Error:     'ERROR',
+} as const);
+
+export type StatusValue = typeof Status[keyof typeof Status];
+
 export interface ChatMessage {
   id: string;
   role: MessageRole;
@@ -18,4 +27,5 @@ export interface ChatMessagePayload {
 
 export interface AimuroResponse {
   answer: string;
+  isComplete: boolean;
 }

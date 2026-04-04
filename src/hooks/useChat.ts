@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import type { ChatMessage, ChatMessagePayload, ConversationPayload } from '../types/chat';
+import type { ChatMessage, ChatMessagePayload, ConversationPayload, StatusValue } from '../types/chat';
+import { Status } from '../types/chat';
 import { createChatStream } from '../services/chatService';
 import type { SSEClient } from '../services/sseClient';
 
@@ -9,8 +10,8 @@ function makeId(): string {
 
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<StatusValue>(Status.Idle);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const clientRef = useRef<SSEClient | null>(null);
 
   useEffect(() => {
@@ -21,9 +22,11 @@ export function useChat() {
 
   const send = useCallback(
     (text: string) => {
-      if (!text.trim() || sending) {
+      console.log("Sending", text);
+      if (!text.trim() || status === Status.Loading || status === Status.Streaming) {
         return;
       }
+      console.log("Passed the gaurd block");
 
       clientRef.current?.close();
       clientRef.current = null;
@@ -35,8 +38,8 @@ export function useChat() {
       };
 
       setMessages(prev => [...prev, userMsg]);
-      setSending(true);
-      setError(null);
+      setStatus(Status.Loading);
+      setErrorMessage(null);
 
       const conversation: ChatMessagePayload[] = [...messages, userMsg].map(
         m => ({
@@ -52,34 +55,38 @@ export function useChat() {
       ]);
 
       const finalize = () => {
+        console.log("finalizing")
         setMessages(prev =>
           prev.map(m =>
             m.id === assistantId ? { ...m, isStreaming: false } : m,
           ),
         );
-        setSending(false);
+        console.log("setting idle")
+        setStatus(Status.Idle);
         clientRef.current = null;
       };
 
       clientRef.current = createChatStream(
         { conversation } as ConversationPayload,
         token => {
+          setStatus(prev => prev === Status.Loading ? Status.Streaming : prev);
           setMessages(prev =>
             prev.map(m =>
               m.id === assistantId ? { ...m, content: m.content + token } : m,
             ),
           );
         },
-        errorMessage => {
-          setError(errorMessage);
+        msg => {
+          setErrorMessage(msg);
+          setStatus(Status.Error);
           setMessages(prev => prev.filter(m => m.id !== assistantId));
-          finalize();
+          clientRef.current = null;
         },
         finalize,
       );
     },
-    [messages, sending],
+    [messages, status],
   );
 
-  return { messages, sending, error, send };
+  return { messages, status, errorMessage, send };
 }
