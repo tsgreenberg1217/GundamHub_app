@@ -18,6 +18,14 @@ npm start
 yarn start
 ```
 
+For mocks
+
+```sh
+# Using npm
+npm run start:mock
+npm run {platform}:mock
+```
+
 ## Step 2: Build and run your app
 
 With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
