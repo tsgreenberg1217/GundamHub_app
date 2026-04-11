@@ -41,16 +41,18 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
     paddingHorizontal: 14,
     paddingVertical: 10,
-    borderRadius: 4,
+    borderRadius: 14,
   },
   bubbleUser: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.surface2,
+    borderWidth: 1,
+    borderColor: Colors.secondary,
     borderBottomRightRadius: 0,
   },
   bubbleAssistant: {
     backgroundColor: Colors.surface2,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: Colors.primary,
     borderBottomLeftRadius: 0,
   },
   text: {
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   textUser: {
-    color: Colors.background,
+    color: Colors.text,
   },
   textAssistant: {
     color: Colors.text,
