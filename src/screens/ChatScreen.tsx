@@ -93,7 +93,7 @@ export function ChatScreen() {
           ]}>
           <TextInput
             style={styles.input}
-            placeholder="Ask the conduit..."
+            placeholder="Ask AiMuro..."
             placeholderTextColor={Colors.textMuted}
             value={inputText}
             onChangeText={setInputText}

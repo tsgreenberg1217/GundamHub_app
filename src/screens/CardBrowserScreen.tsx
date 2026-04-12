@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: HORIZONTAL_PADDING,
+    marginTop: 16
   },
   columnWrapper: {
     gap: COLUMN_GAP,
