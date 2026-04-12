@@ -12,17 +12,24 @@ export function MessageBubble({ message }: MessageBubbleProps) {
   const isUser = message.role === 'user';
 
   return (
-    <View style={[styles.row, isUser ? styles.rowUser : styles.rowAssistant]}>
-      <View
-        style={[
-          styles.bubble,
-          isUser ? styles.bubbleUser : styles.bubbleAssistant,
+      <View style={[styles.row, isUser ? styles.rowUser : styles.rowAssistant]}>
+        <View style={[
+          styles.bubbleOuter,
+          isUser ? styles.bubbleUserOuter : styles.bubbleAssistantOuter,
         ]}>
-        <Text style={[styles.text, isUser ? styles.textUser : styles.textAssistant]}>
-          {message.content}{message.isStreaming ? '▌' : ''}
-        </Text>
+          <View
+            style={[
+              styles.bubble,
+              isUser ? styles.bubbleUser : styles.bubbleAssistant,
+
+            ]}>
+            <Text style={[styles.text, isUser ? styles.textUser : styles.textAssistant]}>
+              {message.content}{message.isStreaming ? '▌' : ''}
+            </Text>
+          </View>
+        </View>
+
       </View>
-    </View>
   );
 }
 
@@ -37,23 +44,33 @@ const styles = StyleSheet.create({
   rowAssistant: {
     alignItems: 'flex-start',
   },
+  bubbleOuter: {
+    maxWidth: '80%',
+    borderRadius: 14,
+  },
   bubble: {
     maxWidth: '80%',
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 14,
   },
+  bubbleUserOuter: {
+    paddingRight: 1,
+    backgroundColor: Colors.primary,
+    borderTopRightRadius: 0,
+  },
+  bubbleAssistantOuter: {
+    paddingLeft: 1,
+    backgroundColor: Colors.secondary,
+    borderTopLeftRadius: 0,
+  },
   bubbleUser: {
     backgroundColor: Colors.surface2,
-    borderWidth: 1,
-    borderColor: Colors.secondary,
-    borderBottomRightRadius: 0,
+    borderTopRightRadius: 0,
   },
   bubbleAssistant: {
     backgroundColor: Colors.surface2,
-    borderWidth: 1,
-    borderColor: Colors.primary,
-    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
   },
   text: {
     fontFamily: Fonts.body,
