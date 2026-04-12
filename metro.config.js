@@ -20,6 +20,7 @@ const MOCK_MAP = {
 const config = USE_MOCKS
   ? {
     resolver: {
+      assetExts: [...getDefaultConfig(__dirname).resolver.assetExts, 'lottie'],
       resolveRequest: (context, moduleName, platform) => {
         const resolution = context.resolveRequest(context, moduleName, platform);
         console.log("Resolving:", moduleName, "->", resolution?.filePath);

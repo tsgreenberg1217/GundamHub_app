@@ -15,10 +15,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useCards } from '../hooks/useCards';
 import { CardItem } from '../components/CardItem';
 import { FilterTab } from '../components/FilterTab';
-import type { Card, CardFilter } from '../types/card';
+import type { CardFilter } from '../types/card';
 import { CARD_FILTERS } from '../types/card';
 import { Colors } from '../theme/colors';
 import { Fonts, FontSizes } from '../theme/typography';
+import { AiMuroBot } from '../components/AiMuroBot.tsx';
 
 const HORIZONTAL_PADDING = 16;
 const COLUMN_GAP = 10;
@@ -40,20 +41,12 @@ export function CardBrowserScreen() {
   }, [cards, searchQuery]);
 
   return (
-    <View
-      style={[styles.container, { paddingTop: insets.top }]}
-    >
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
 
       {/* Header */}
-      <View
-      style={styles.header}
-      >
-        <Text
-        style={styles.logo}
-        >
-          NEON CONDUIT
-        </Text>
+      <View style={styles.header}>
+        <Text style={styles.logo}>NEON CONDUIT</Text>
         <View
         // style={styles.headerIcons}
         >
@@ -103,20 +96,12 @@ export function CardBrowserScreen() {
 
       {/* Content */}
       {loading ? (
-        <View
-        style={styles.centered}
-        >
+        <View style={styles.centered}>
           <ActivityIndicator size="large" color={Colors.primary} />
         </View>
       ) : error ? (
-        <View
-        style={styles.centered}
-        >
-          <Text
-          style={styles.errorText}
-          >
-            Failed to load cards.
-          </Text>
+        <View style={styles.centered}>
+          <Text style={styles.errorText}>Failed to load cards.</Text>
           <Pressable onPress={() => refetch()} style={styles.retryButton}>
             <Text style={styles.retryLabel}>Retry</Text>
           </Pressable>
@@ -133,14 +118,8 @@ export function CardBrowserScreen() {
           ]}
           renderItem={({ item }) => <CardItem card={item} />}
           ListEmptyComponent={
-            <View
-            style={styles.centered}
-            >
-              <Text
-              style={styles.emptyText}
-              >
-                No cards found.
-              </Text>
+            <View style={styles.centered}>
+              <Text style={styles.emptyText}>No cards found.</Text>
             </View>
           }
         />

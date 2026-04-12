@@ -29,7 +29,7 @@ export function createChatStream(
         onDone();
       }
     }, 80);
-  }, 300);
+  }, 2000);
 
   return {
     close() {

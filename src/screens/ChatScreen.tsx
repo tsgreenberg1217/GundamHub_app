@@ -18,6 +18,7 @@ import type { ChatMessage } from '../types/chat';
 import { Status } from '../types/chat';
 import { Colors } from '../theme/colors';
 import { Fonts, FontSizes } from '../theme/typography';
+import { AiMuroBot } from '../components/AiMuroBot.tsx';
 
 export function ChatScreen() {
   const insets = useSafeAreaInsets();
@@ -27,7 +28,7 @@ export function ChatScreen() {
   const listRef = useRef<FlatList<ChatMessage>>(null);
 
   const handleSend = async () => {
-    console.log("Sending chat");
+    console.log('Sending chat');
     const text = inputText;
     setInputText('');
     await send(text);
@@ -36,22 +37,13 @@ export function ChatScreen() {
   return (
     <KeyboardAvoidingView
       style={styles.flex}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View style={[styles.container, { paddingTop: insets.top }]}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>THE CONDUIT</Text>
-          <View style={styles.statusRow}>
-            <View
-              style={[
-                styles.statusDot,
-                { backgroundColor: isActive ? '#f39c12' : Colors.primary },
-              ]}
-            />
-            <Text style={styles.statusLabel}>
-              {isActive ? 'Processing...' : 'Online'}
-            </Text>
-          </View>
+          <AiMuroBot status={status} />
+          <Text style={styles.title}>AiMuro</Text>
         </View>
 
         {/* Message list */}
@@ -62,7 +54,10 @@ export function ChatScreen() {
           renderItem={({ item }) => <MessageBubble message={item} />}
           contentContainerStyle={[styles.listContent, { flexGrow: 1 }]}
           onContentSizeChange={() =>
-            listRef.current?.scrollToOffset({ offset: Infinity, animated: true })
+            listRef.current?.scrollToOffset({
+              offset: Infinity,
+              animated: true,
+            })
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
@@ -86,11 +81,7 @@ export function ChatScreen() {
         )}
 
         {/* Input row */}
-        <View
-          style={[
-            styles.inputRow,
-            { paddingBottom: insets.bottom + 8 },
-          ]}>
+        <View style={[styles.inputRow, { paddingBottom: insets.bottom + 8 }]}>
           <TextInput
             style={styles.input}
             placeholder="Ask AiMuro..."
@@ -108,7 +99,8 @@ export function ChatScreen() {
               (!inputText.trim() || isActive) && styles.sendButtonDisabled,
             ]}
             onPress={handleSend}
-            disabled={!inputText.trim() || isActive}>
+            disabled={!inputText.trim() || isActive}
+          >
             {isActive ? (
               <ActivityIndicator size="small" color={Colors.background} />
             ) : (
@@ -138,8 +130,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   title: {
     fontFamily: Fonts.headline,
