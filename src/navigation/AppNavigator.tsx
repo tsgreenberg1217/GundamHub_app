@@ -8,7 +8,9 @@ import { DeckListScreen } from '../screens/DeckListScreen';
 import { ChatScreen } from '../screens/ChatScreen';
 import { Colors } from '../theme/colors';
 import { Fonts, FontSizes } from '../theme/typography';
-
+import DeckIcon from "../vector/DeckIcon.svg"
+import AimuroIcon from "../vector/AimuroIcon.svg"
+import CardIcon from "../vector/CardIcon.svg"
 enableScreens();
 
 const Tab = createBottomTabNavigator();
@@ -35,17 +37,14 @@ export function AppNavigator() {
             fontFamily: Fonts.body,
             fontSize: FontSizes.xs,
           },
-        }}>
+        }}
+      >
         <Tab.Screen
           name="Cards"
           component={CardBrowserScreen}
           options={{
             tabBarIcon: ({ color, size }: TabIconProps) => (
-              <MaterialCommunityIcons
-                name="cards-outline"
-                size={size}
-                color={color}
-              />
+              <CardIcon width={size} height={size} color={color}  />
             ),
           }}
         />
@@ -54,11 +53,7 @@ export function AppNavigator() {
           component={DeckListScreen}
           options={{
             tabBarIcon: ({ color, size }: TabIconProps) => (
-              <MaterialCommunityIcons
-                name="layers-outline"
-                size={size}
-                color={color}
-              />
+              <DeckIcon width={size} height={size} color={color}  />
             ),
           }}
         />
@@ -67,11 +62,7 @@ export function AppNavigator() {
           component={ChatScreen}
           options={{
             tabBarIcon: ({ color, size }: TabIconProps) => (
-              <MaterialCommunityIcons
-                name="forum-outline"
-                size={size}
-                color={color}
-              />
+              <AimuroIcon width={size} height={size} color={color}  />
             ),
           }}
         />

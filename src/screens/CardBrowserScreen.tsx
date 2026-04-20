@@ -19,8 +19,6 @@ import type { CardFilter } from '../types/card';
 import { CARD_FILTERS } from '../types/card';
 import { Colors } from '../theme/colors';
 import { Fonts, FontSizes } from '../theme/typography';
-import { AiMuroBot } from '../components/AiMuroBot.tsx';
-
 const HORIZONTAL_PADDING = 16;
 const COLUMN_GAP = 10;
 
@@ -46,7 +44,7 @@ export function CardBrowserScreen() {
 
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.logo}>NEON CONDUIT</Text>
+        <Text style={styles.logo}>Card Library</Text>
         <View
         // style={styles.headerIcons}
         >

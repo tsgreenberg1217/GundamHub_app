@@ -17,21 +17,33 @@ const MOCK_MAP = {
     path.resolve(__dirname, 'src/services/__mocks__/chatService.ts'),
 };
 
-const config = USE_MOCKS
+const defaultConfig = getDefaultConfig(__dirname);
+const { assetExts, sourceExts } = defaultConfig.resolver;
+
+const svgConfig = {
+  transformer: {
+    babelTransformerPath: require.resolve('react-native-svg-transformer/react-native'),
+  },
+  resolver: {
+    assetExts: [...assetExts.filter((ext) => ext !== 'svg'), 'lottie'],
+    sourceExts: [...sourceExts, 'svg'],
+  },
+};
+
+const mockConfig = USE_MOCKS
   ? {
-    resolver: {
-      assetExts: [...getDefaultConfig(__dirname).resolver.assetExts, 'lottie'],
-      resolveRequest: (context, moduleName, platform) => {
-        const resolution = context.resolveRequest(context, moduleName, platform);
-        console.log("Resolving:", moduleName, "->", resolution?.filePath);
-        if (resolution.type === 'sourceFile' && MOCK_MAP[resolution.filePath]) {
-          console.log("Redirecting to mock:", MOCK_MAP[resolution.filePath]);
-          return { ...resolution, filePath: MOCK_MAP[resolution.filePath] };
-        }
-        return resolution;
+      resolver: {
+        resolveRequest: (context, moduleName, platform) => {
+          const resolution = context.resolveRequest(context, moduleName, platform);
+          console.log('Resolving:', moduleName, '->', resolution?.filePath);
+          if (resolution.type === 'sourceFile' && MOCK_MAP[resolution.filePath]) {
+            console.log('Redirecting to mock:', MOCK_MAP[resolution.filePath]);
+            return { ...resolution, filePath: MOCK_MAP[resolution.filePath] };
+          }
+          return resolution;
+        },
       },
-    },
-  }
+    }
   : {};
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = mergeConfig(mergeConfig(defaultConfig, svgConfig), mockConfig);

@@ -21,7 +21,7 @@ export function AiMuroBot({ status, size = 50 }: AiMuroBotProps) {
   return (
     <LottieView
       ref={animationRef}
-      source={require('../../lottie/aimuro_chat_front.lottie')}
+      source={require('../../lottie/aimuro_chat_front_2.lottie')}
       style={{ width: size, height: size }}
       loop={isActive}
       autoPlay={false}

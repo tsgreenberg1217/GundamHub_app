@@ -21,7 +21,7 @@ export function DeckListScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>COMMAND CENTER</Text>
+        <Text style={styles.title}>Deck Repository</Text>
       </View>
 
       {/* New Deck button */}

@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from '@react-native-vector-icons/material-icons';
 import { useChat } from '../hooks/useChat';
 import { MessageBubble } from '../components/MessageBubble';
 import type { ChatMessage } from '../types/chat';
@@ -61,8 +61,8 @@ export function ChatScreen() {
           }
           ListEmptyComponent={
             <View style={styles.emptyState}>
-              <MaterialCommunityIcons
-                name="forum-outline"
+              <MaterialIcons
+                name="send"
                 size={40}
                 color={Colors.surface3}
               />
@@ -104,7 +104,7 @@ export function ChatScreen() {
             {isActive ? (
               <ActivityIndicator size="small" color={Colors.background} />
             ) : (
-              <MaterialCommunityIcons
+              <MaterialIcons
                 name="send"
                 size={18}
                 color={Colors.background}
